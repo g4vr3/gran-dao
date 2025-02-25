@@ -2,6 +2,7 @@ package ad.grandao.controller;
 
 import ad.grandao.model.Moto;
 import ad.grandao.service.MotoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -34,4 +35,11 @@ public class MotoController {
     public ResponseEntity<Moto> getMotoById(@PathVariable String matricula) throws IOException {
         return ResponseEntity.ok(motoService.getMotoById(matricula));
     }
+    // Crear una nueva moto
+    @PostMapping
+    public ResponseEntity<Moto> createMoto(@Valid @RequestBody Moto moto) throws IOException {
+        motoService.createMoto(moto);
+        return ResponseEntity.status(201).body(moto);
+    }
+
 }

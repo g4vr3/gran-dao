@@ -2,6 +2,7 @@ package ad.grandao.service;
 
 import ad.grandao.model.Moto;
 import ad.grandao.repository.MotoDAO;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -34,4 +35,12 @@ public class MotoService {
         return motoDAO.readMotoById(matricula)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Moto no encontrada"));
     }
+    // Crear una nueva moto
+    public void createMoto(@Valid Moto moto) throws IOException {
+        if (motoDAO.existsById(moto.getMatricula())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Esta moto ya existe");
+        }
+        motoDAO.saveMoto(moto);
+    }
+
 }

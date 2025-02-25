@@ -32,6 +32,36 @@ public class MotoDAO {
                 .filter(moto -> moto.getMatricula().equals(matricula))
                 .findFirst();
     }
+    // Verificar si una moto existe por su matrícula
+    public boolean existsById(String matricula) throws IOException {
+        return readMotoById(matricula).isPresent();
+    }
+    // Guardar una moto en el archivo
+    public void saveMoto(Moto moto) throws IOException {
+        List<Moto> motos = readMotosFromFile();
+        motos.removeIf(existingMoto -> existingMoto.getMatricula().equals(moto.getMatricula()));
+        motos.add(moto);
+        writeMotosToFile(motos);
+    }
+
+    // Escribir todas las motos en el archivo
+    private void writeMotosToFile(List<Moto> motos) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
+            for (Moto moto : motos) {
+                writer.write(formatMoto(moto));
+                writer.newLine();
+            }
+        }
+    }
+    // Formatear un objeto Moto a una línea de texto
+    private String formatMoto(Moto moto) {
+        return String.join(",",
+                moto.getMatricula(),
+                moto.getMarca(),
+                moto.getModelo(),
+                moto.getColor(),
+                moto.getPrecio().toString());
+    }
 
     // Parsear una línea de texto a un objeto Moto
     private Moto parseMoto(String line) {
