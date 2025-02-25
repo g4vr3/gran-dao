@@ -37,4 +37,17 @@ public class BarcoController {
         barcoService.createBarco(barco);
         return ResponseEntity.status(201).body(barco);
     }
+
+    // Actualizar un barco existente
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateBarco(@PathVariable String id, @Valid @RequestBody Barco barcoDetails) {
+        return ResponseEntity.ok(barcoService.updateBarco(id, barcoDetails));
+    }
+
+    // Eliminar un barco por su ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBarco(@PathVariable String id) {
+        barcoService.deleteBarco(id);
+        return ResponseEntity.noContent().build();
+    }
 }
