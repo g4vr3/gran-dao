@@ -40,4 +40,17 @@ public class CocheController {
     public ResponseEntity<?> createCoche(@Valid @RequestBody Coche coche) {
         return ResponseEntity.ok(cocheService.save(coche));
     }
+
+    // PUT (Actualizar coche)
+    @PutMapping("/{matricula}")
+    public ResponseEntity<?> updateCoche(@PathVariable String matricula, @Valid @RequestBody Coche cocheDetails) {
+        return ResponseEntity.ok(cocheService.update(matricula, cocheDetails));
+    }
+
+    // DELETE (Eliminar coche)
+    @DeleteMapping("/{matricula}")
+    public ResponseEntity<?> deleteCoche(@PathVariable String matricula) {
+        cocheService.delete(matricula);
+        return ResponseEntity.noContent().build();
+    }
 }

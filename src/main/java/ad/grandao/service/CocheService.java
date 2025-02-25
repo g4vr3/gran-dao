@@ -41,4 +41,28 @@ public class CocheService {
         }
         return cocheRepository.save(coche);
     }
+    // Actualizar un coche
+    public Coche update(String matricula, Coche cocheDetails) {
+        if (!matricula.equals(cocheDetails.getMatricula())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La matrícula del coche no coincide con la de la URL");
+        }
+
+        Coche coche = cocheRepository.findById(matricula)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coche no encontrado"));
+
+        coche.setMarca(cocheDetails.getMarca());
+        coche.setModelo(cocheDetails.getModelo());
+        coche.setColor(cocheDetails.getColor());
+        coche.setPrecio(cocheDetails.getPrecio());
+
+        return cocheRepository.save(coche);
+    }
+
+    // Eliminar un coche
+    public void delete(String matricula) {
+        if (!cocheRepository.existsById(matricula)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Coche no encontrado");
+        }
+        cocheRepository.deleteById(matricula);
+    }
 }
