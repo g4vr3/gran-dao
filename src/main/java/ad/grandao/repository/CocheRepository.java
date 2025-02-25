@@ -1,4 +1,7 @@
 package ad.grandao.repository;
 
-public interface CocheRepository extends JpaRepository<Coche,Integer>{
+import ad.grandao.model.Coche;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CocheRepository extends JpaRepository<Coche,String> {
 }
