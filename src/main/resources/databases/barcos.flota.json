@@ -1,0 +1,27 @@
+[{
+  "_id": {
+    "$oid": "67bde7b033cdbc74df9eeb6b"
+  },
+  "nombre": "Ocean Voyager",
+  "tipo": "Crucero",
+  "capacidad": 1800,
+  "ano_construccion": 2018
+},
+  {
+    "_id": {
+      "$oid": "67bde7b033cdbc74df9eeb6c"
+    },
+    "nombre": "Sea Guardian",
+    "tipo": "Yate",
+    "capacidad": 30,
+    "ano_construccion": 2020
+  },
+  {
+    "_id": {
+      "$oid": "67bde7b033cdbc74df9eeb6d"
+    },
+    "nombre": "Blue Whale",
+    "tipo": "Transatlántico",
+    "capacidad": 5000,
+    "ano_construccion": 2022
+  }]
