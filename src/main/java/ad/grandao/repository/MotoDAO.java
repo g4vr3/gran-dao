@@ -1,6 +1,8 @@
 package ad.grandao.repository;
 
 import ad.grandao.model.Moto;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
@@ -11,17 +13,28 @@ import java.util.Optional;
 @Repository
 public class MotoDAO {
 
-    private static final String FILE_PATH = "resources/databases/motos.txt";
+    private static final String FILE_PATH = "databases/motos.txt"; // Ruta dentro de resources
 
     // Leer todas las motos desde el archivo
     public List<Moto> readMotosFromFile() throws IOException {
         List<Moto> motos = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+        // Acceder al archivo dentro del classpath
+        Resource resource = new ClassPathResource(FILE_PATH);
+
+        // Asegurarnos de que el archivo existe y está disponible en el classpath
+        if (!resource.exists()) {
+            throw new FileNotFoundException("No se pudo encontrar el archivo: " + FILE_PATH);
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 Moto moto = parseMoto(line);
                 motos.add(moto);
             }
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo: " + e.getMessage());
+            throw e; // Lanza el error para que sea manejado adecuadamente
         }
         return motos;
     }
@@ -32,10 +45,12 @@ public class MotoDAO {
                 .filter(moto -> moto.getMatricula().equals(matricula))
                 .findFirst();
     }
+
     // Verificar si una moto existe por su matrícula
     public boolean existsById(String matricula) throws IOException {
         return readMotoById(matricula).isPresent();
     }
+
     // Guardar una moto en el archivo
     public void saveMoto(Moto moto) throws IOException {
         List<Moto> motos = readMotosFromFile();
@@ -46,13 +61,14 @@ public class MotoDAO {
 
     // Escribir todas las motos en el archivo
     private void writeMotosToFile(List<Moto> motos) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/databases/motos.txt"))) {
             for (Moto moto : motos) {
                 writer.write(formatMoto(moto));
                 writer.newLine();
             }
         }
     }
+
     // Formatear un objeto Moto a una línea de texto
     private String formatMoto(Moto moto) {
         return String.join(",",
