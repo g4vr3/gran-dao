@@ -71,8 +71,8 @@ public class BicicletaDAO {
     }
 
     // Verificar si una bicicleta existe por su ID
-    public boolean existsById(String matricula) throws Exception {
-        return readBicicletaById(matricula).isPresent();
+    public boolean existsById(String id) throws Exception {
+        return readBicicletaById(id).isPresent();
     }
 
     // Escribir todas las bicicletas en el archivo XML
@@ -91,8 +91,8 @@ public class BicicletaDAO {
             // Crear el elemento <bicicleta>
             Element bicicletaElement = doc.createElement("bicicleta");
 
-            // Crear y agregar el elemento <matrícula>
-            Element matricula = doc.createElement("matricula");
+            // Crear y agregar el elemento <id>
+            Element matricula = doc.createElement("id");
             matricula.appendChild(doc.createTextNode(bicicleta.getId()));
             bicicletaElement.appendChild(matricula);
 

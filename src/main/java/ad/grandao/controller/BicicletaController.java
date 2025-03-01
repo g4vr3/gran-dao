@@ -27,11 +27,11 @@ public class BicicletaController {
         return ResponseEntity.ok(bicicletaService.findAll());
     }
 
-    // Obtener una bicicleta por su matrícula
-    @GetMapping("/{matricula}")
+    // Obtener una bicicleta por su ID
+    @GetMapping("/{id}")
     @Cacheable
-    public ResponseEntity<?> getBicicleta(@PathVariable String matricula) {
-        return ResponseEntity.ok(bicicletaService.findById(matricula));
+    public ResponseEntity<?> getBicicleta(@PathVariable String id) {
+        return ResponseEntity.ok(bicicletaService.findById(id));
     }
 
     // Crear una nueva bicicleta
