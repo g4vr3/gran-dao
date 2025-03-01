@@ -1,0 +1,2 @@
+1234BCD,Yamaha,MT-07,Negro,7500.0
+1234GFG,Honda,RR109,Rojo,5500.0

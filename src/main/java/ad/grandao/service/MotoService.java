@@ -32,15 +32,25 @@ public class MotoService {
 
     // Obtener una moto por su matrícula
     public Moto getMotoById(String matricula) throws IOException {
-        return motoDAO.readMotoById(matricula)
+        List<Moto> motos = motoDAO.readMotosFromFile();
+        return motos.stream()
+                .filter(moto -> moto.getMatricula().equals(matricula))
+                .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Moto no encontrada"));
     }
+
     // Crear una nueva moto
     public void createMoto(@Valid Moto moto) throws IOException {
-        if (motoDAO.existsById(moto.getMatricula())) {
+        // Verificar si la moto ya existe antes de agregarla
+        List<Moto> motos = motoDAO.readMotosFromFile();
+        boolean motoExistente = motos.stream()
+                .anyMatch(existingMoto -> existingMoto.getMatricula().equals(moto.getMatricula()));
+
+        if (motoExistente) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Esta moto ya existe");
         }
+
+        // Si no existe, la guarda
         motoDAO.saveMoto(moto);
     }
-
 }

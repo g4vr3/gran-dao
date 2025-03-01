@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class MotoDAO {
@@ -18,15 +17,13 @@ public class MotoDAO {
     // Leer todas las motos desde el archivo
     public List<Moto> readMotosFromFile() throws IOException {
         List<Moto> motos = new ArrayList<>();
-        // Acceder al archivo dentro del classpath
-        Resource resource = new ClassPathResource(FILE_PATH);
+        File file = new File("src/main/resources/databases/motos.txt");  // Ruta directa en el sistema de archivos
 
-        // Asegurarnos de que el archivo existe y está disponible en el classpath
-        if (!resource.exists()) {
-            throw new FileNotFoundException("No se pudo encontrar el archivo: " + FILE_PATH);
+        if (!file.exists()) {
+            throw new FileNotFoundException("No se pudo encontrar el archivo: " + file.getPath());
         }
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 Moto moto = parseMoto(line);
@@ -34,34 +31,23 @@ public class MotoDAO {
             }
         } catch (IOException e) {
             System.err.println("Error al leer el archivo: " + e.getMessage());
-            throw e; // Lanza el error para que sea manejado adecuadamente
+            throw e;
         }
         return motos;
     }
 
-    // Leer una moto por su matrícula
-    public Optional<Moto> readMotoById(String matricula) throws IOException {
-        return readMotosFromFile().stream()
-                .filter(moto -> moto.getMatricula().equals(matricula))
-                .findFirst();
-    }
-
-    // Verificar si una moto existe por su matrícula
-    public boolean existsById(String matricula) throws IOException {
-        return readMotoById(matricula).isPresent();
-    }
 
     // Guardar una moto en el archivo
     public void saveMoto(Moto moto) throws IOException {
-        List<Moto> motos = readMotosFromFile();
-        motos.removeIf(existingMoto -> existingMoto.getMatricula().equals(moto.getMatricula()));
-        motos.add(moto);
-        writeMotosToFile(motos);
+        List<Moto> motos = readMotosFromFile();  // Leer motos actuales del archivo
+        motos.add(moto);  // Agregar la nueva moto a la lista
+        writeMotosToFile(motos);  // Escribir todas las motos en el archivo de nuevo
     }
 
     // Escribir todas las motos en el archivo
     private void writeMotosToFile(List<Moto> motos) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/databases/motos.txt"))) {
+        File file = new File("src/main/resources/databases/motos.txt");  // Ruta directa en el sistema de archivos
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (Moto moto : motos) {
                 writer.write(formatMoto(moto));
                 writer.newLine();
