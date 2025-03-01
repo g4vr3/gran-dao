@@ -26,7 +26,6 @@ public class Barco {
     @Field(value = "capacidad")
     @NotNull(message = "La capacidad no puede estar vacía")
     @Positive(message = "La capacidad debe ser un número positivo")
-    @Pattern(regexp = "^[0-9]+$", message = "La capacidad debe ser un número entero")
     private Integer capacidad;
 
     @Field(value = "ano_construccion")
