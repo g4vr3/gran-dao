@@ -31,12 +31,8 @@ public class BicicletaService {
 
     // Obtener una bicicleta por su ID
     public Bicicleta findById(String id) {
-        try {
             return bicicletaDAO.readBicicletaById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bicicleta no encontrada"));
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al buscar la bicicleta");
-        }
     }
 
     // Crear una nueva bicicleta

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bicicletas>
+    <bicicleta>
+        <id>B1234</id>
+        <marca>Giant</marca>
+        <modelo>Defy Advanced</modelo>
+        <color>Rojo</color>
+        <precio>1500.0</precio>
+        <peso>8.5</peso>
+        <material>fibra de carbono</material>
+    </bicicleta>
+    <bicicleta>
+        <id>B5678</id>
+        <marca>Trek</marca>
+        <modelo>Domane SL 6</modelo>
+        <color>Azul</color>
+        <precio>3200.0</precio>
+        <peso>7.8</peso>
+        <material>fibra de carbono</material>
+    </bicicleta>
+    <bicicleta>
+        <id>B9101</id>
+        <marca>Specialized</marca>
+        <modelo>Roubaix</modelo>
+        <color>Negro</color>
+        <precio>2800.0</precio>
+        <peso>8.2</peso>
+        <material>aluminio</material>
+    </bicicleta>
+</bicicletas>
