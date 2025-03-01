@@ -62,4 +62,81 @@ public class BicicletaDAO {
                 .filter(bicicleta -> bicicleta.getId().equals(id))
                 .findFirst();
     }
+
+    // Guardar una bicicleta en el archivo XML
+    public void saveBicicleta(Bicicleta bicicleta) throws Exception {
+        List<Bicicleta> bicicletas = readBicicletasFromFile(); // Leer todas las bicicletas del archivo
+        bicicletas.add(bicicleta); // Agregar la nueva bicicleta a la lista
+        writeBicicletasToFile(bicicletas); // Escribir todas las bicicletas en el archivo
+    }
+
+    // Verificar si una bicicleta existe por su ID
+    public boolean existsById(String matricula) throws Exception {
+        return readBicicletaById(matricula).isPresent();
+    }
+
+    // Escribir todas las bicicletas en el archivo XML
+    private void writeBicicletasToFile(List<Bicicleta> bicicletas) throws Exception {
+        // Crear un nuevo documento XML
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.newDocument();
+
+        // Crear el elemento raíz <bicicletas>
+        Element rootElement = doc.createElement("bicicletas");
+        doc.appendChild(rootElement);
+
+        // Iterar sobre la lista de bicicletas
+        for (Bicicleta bicicleta : bicicletas) {
+            // Crear el elemento <bicicleta>
+            Element bicicletaElement = doc.createElement("bicicleta");
+
+            // Crear y agregar el elemento <matrícula>
+            Element matricula = doc.createElement("matricula");
+            matricula.appendChild(doc.createTextNode(bicicleta.getId()));
+            bicicletaElement.appendChild(matricula);
+
+            // Crear y agregar el elemento <marca>
+            Element marca = doc.createElement("marca");
+            marca.appendChild(doc.createTextNode(bicicleta.getMarca()));
+            bicicletaElement.appendChild(marca);
+
+            // Crear y agregar el elemento <modelo>
+            Element modelo = doc.createElement("modelo");
+            modelo.appendChild(doc.createTextNode(bicicleta.getModelo()));
+            bicicletaElement.appendChild(modelo);
+
+            // Crear y agregar el elemento <color>
+            Element color = doc.createElement("color");
+            color.appendChild(doc.createTextNode(bicicleta.getColor()));
+            bicicletaElement.appendChild(color);
+
+            // Crear y agregar el elemento <precio>
+            Element precio = doc.createElement("precio");
+            precio.appendChild(doc.createTextNode(bicicleta.getPrecio().toString()));
+            bicicletaElement.appendChild(precio);
+
+            // Crear y agregar el elemento <peso>
+            Element peso = doc.createElement("peso");
+            peso.appendChild(doc.createTextNode(bicicleta.getPeso().toString()));
+            bicicletaElement.appendChild(peso);
+
+            // Crear y agregar el elemento <material>
+            Element material = doc.createElement("material");
+            material.appendChild(doc.createTextNode(bicicleta.getMaterial()));
+            bicicletaElement.appendChild(material);
+
+            // Agregar el elemento <bicicleta> al elemento raíz <bicicletas>
+            rootElement.appendChild(bicicletaElement);
+        }
+
+        // Configurar el transformador para escribir el documento XML con sangría
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(new File(FILE_PATH));
+        // Transformar el documento DOM en un archivo XML
+        transformer.transform(source, result);
+    }
 }

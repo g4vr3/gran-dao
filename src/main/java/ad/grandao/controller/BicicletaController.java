@@ -27,10 +27,17 @@ public class BicicletaController {
         return ResponseEntity.ok(bicicletaService.findAll());
     }
 
-    // Obtener una bicicleta por su ID
-    @GetMapping("/{id}")
+    // Obtener una bicicleta por su matrícula
+    @GetMapping("/{matricula}")
     @Cacheable
-    public ResponseEntity<?> getBicicleta(@PathVariable String id) {
-        return ResponseEntity.ok(bicicletaService.findById(id));
+    public ResponseEntity<?> getBicicleta(@PathVariable String matricula) {
+        return ResponseEntity.ok(bicicletaService.findById(matricula));
+    }
+
+    // Crear una nueva bicicleta
+    @PostMapping
+    public ResponseEntity<Bicicleta> createBicicleta(@Valid @RequestBody Bicicleta bicicleta) throws Exception {
+        bicicletaService.createBicicleta(bicicleta);
+        return ResponseEntity.status(201).body(bicicleta);
     }
 }

@@ -2,6 +2,7 @@ package ad.grandao.service;
 
 import ad.grandao.model.Bicicleta;
 import ad.grandao.repository.BicicletaDAO;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,12 +30,20 @@ public class BicicletaService {
     }
 
     // Obtener una bicicleta por su ID
-    public Bicicleta findById(String id) {
+    public Bicicleta findById(String matricula) {
         try {
-            return bicicletaDAO.readBicicletaById(id)
+            return bicicletaDAO.readBicicletaById(matricula)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bicicleta no encontrada"));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al buscar la bicicleta");
         }
+    }
+
+    // Crear una nueva bicicleta
+    public void createBicicleta(@Valid Bicicleta bicicleta) throws Exception {
+        if (bicicletaDAO.existsById(bicicleta.getId())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Esta bicicleta ya existe");
+        }
+        bicicletaDAO.saveBicicleta(bicicleta);
     }
 }
